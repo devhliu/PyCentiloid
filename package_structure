@@ -1,0 +1,17 @@
+pycentiloid/
+├── __init__.py
+├── preprocessing/
+│   ├── __init__.py
+│   ├── registration.py
+│   ├── harmonization.py
+│   ├── normalization.py
+│   └── segmentation.py
+├── centiloid/
+│   ├── __init__.py
+│   ├── calculation.py
+│   └── reference.py
+├── utils/
+│   ├── __init__.py
+│   ├── image_utils.py
+│   └── validation.py
+├── config.py
