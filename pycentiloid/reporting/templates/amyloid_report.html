@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amyloid PET Analysis Report</title>
+</head>
+<body>
+    <h1>Amyloid PET Analysis Report</h1>
+    
+    <section class="subject-info">
+        <h2>Subject Information</h2>
+        {{ subject_info }}
+    </section>
+    
+    <section class="results">
+        <h2>Quantitative Results</h2>
+        <div class="centiloid">
+            <h3>Centiloid Score: {{ centiloid_score }}</h3>
+        </div>
+        
+        <div class="suvr-table">
+            <h3>Regional SUVr Values</h3>
+            {{ suvr_table }}
+        </div>
+    </section>
+    
+    <section class="interpretation">
+        <h2>Clinical Interpretation</h2>
+        {{ description }}
+    </section>
+</body>
+</html>

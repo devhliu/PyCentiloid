@@ -1,17 +1,21 @@
 pycentiloid/
 ├── __init__.py
+├── core/
+│   ├── __init__.py
+│   ├── tracer.py        # Tracer definitions and parameters
+│   └── template.py      # Template management
+├── workflows/
+│   ├── __init__.py
+│   ├── centiloid.py     # Centiloid calculation workflow
+│   ├── registration.py  # Registration workflows
+│   └── template.py      # Template creation workflows
 ├── preprocessing/
 │   ├── __init__.py
 │   ├── registration.py
 │   ├── harmonization.py
-│   ├── normalization.py
-│   └── segmentation.py
-├── centiloid/
-│   ├── __init__.py
-│   ├── calculation.py
-│   └── reference.py
+│   └── normalization.py
 ├── utils/
 │   ├── __init__.py
-│   ├── image_utils.py
+│   ├── image.py
 │   └── validation.py
-├── config.py
+└── config.py
