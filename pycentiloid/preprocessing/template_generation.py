@@ -38,7 +38,7 @@ class TemplateBuilder:
         }
     }
     
-    def __init__(self, modality, config=None):
+    def __init__(self, modality, resolution='2mm', config=None):
         """
         Initialize template builder.
         
@@ -46,6 +46,8 @@ class TemplateBuilder:
         ----------
         modality : str
             Image modality ('PET', 'CT', 'T1')
+        resolution : str
+            Target resolution ('1mm', '2mm')
         config : Config, optional
             Configuration object
         """
@@ -54,27 +56,38 @@ class TemplateBuilder:
             
         self.config = config or Config()
         self.modality = modality
+        self.resolution = resolution
         self.params = self.MODALITY_PARAMS[modality]
         self.mni_template = self._get_reference_template()
     
     def _get_reference_template(self):
-        """Get appropriate reference template for modality."""
-        templates = {
-            'PET': 'mni152_pet_2mm.nii.gz',
-            'CT': 'mni152_ct_2mm.nii.gz',
-            'T1': 'mni152_t1_2mm.nii.gz'
+        """Get appropriate reference template for modality and resolution."""
+        template_keys = {
+            'PET': 'MNI152_PET',
+            'CT': 'MNI152_CT',
+            'T1': 'MNI152'
         }
-        return str(self.config.TEMPLATE_DIR / templates[self.modality])
+        template_key = template_keys[self.modality]
+        return str(self.config.TEMPLATES[template_key][self.resolution])
     
     def create_template(self, image_paths, output_dir=None, iterations=3,
-                       target_shape=(91, 109, 91), target_voxel_size=(2, 2, 2)):
-        """Create modality-specific template."""
+                       target_shape=None, target_voxel_size=None):
+        """Create modality-specific template with specified resolution."""
         validate_input_images(image_paths)
         
         output_dir = Path(output_dir or self.config.TEMPLATE_DIR)
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        template_path = str(output_dir / f'{self.modality.lower()}_template.nii.gz')
+        # Set target shape and voxel size based on resolution
+        if target_shape is None or target_voxel_size is None:
+            if self.resolution == '1mm':
+                target_shape = (182, 218, 182)
+                target_voxel_size = (1, 1, 1)
+            else:  # 2mm
+                target_shape = (91, 109, 91)
+                target_voxel_size = (2, 2, 2)
+        
+        template_path = str(output_dir / f'{self.modality.lower()}_{self.resolution}_template.nii.gz')
         
         # Initial registration to MNI
         mni_registered = self._register_all_to_mni(image_paths, output_dir)

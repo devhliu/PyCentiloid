@@ -31,20 +31,33 @@ class Config:
     OUTPUT_DIR = ROOT_DIR / "output"
     
     # Template configurations
-    TEMPLATES = {
-        'MNI152': {
-            '1mm': TEMPLATE_DIR / 'mni152_t1_1mm.nii.gz',
-            '2mm': TEMPLATE_DIR / 'mni152_t1_2mm.nii.gz'
-        },
-        'AAL': {
-            '1mm': TEMPLATE_DIR / 'aal_1mm.nii.gz',
-            '2mm': TEMPLATE_DIR / 'aal_2mm.nii.gz'
-        },
-        'CTX_COMPOSITE': {
-            '1mm': TEMPLATE_DIR / 'centiloid_ctx_composite_1mm.nii.gz',
-            '2mm': TEMPLATE_DIR / 'centiloid_ctx_composite_2mm.nii.gz'
+    # Template configurations - update to support multiple resolutions
+        TEMPLATES = {
+            'MNI152': {
+                '1mm': TEMPLATE_DIR / 'mni152_t1_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'mni152_t1_2mm.nii.gz'
+            },
+            'MNI152_PET': {
+                '1mm': TEMPLATE_DIR / 'mni152_pet_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'mni152_pet_2mm.nii.gz'
+            },
+            'MNI152_CT': {
+                '1mm': TEMPLATE_DIR / 'mni152_ct_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'mni152_ct_2mm.nii.gz'
+            },
+            'AAL': {
+                '1mm': TEMPLATE_DIR / 'aal_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'aal_2mm.nii.gz'
+            },
+            'CTX_COMPOSITE': {
+                '1mm': TEMPLATE_DIR / 'centiloid_ctx_composite_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'centiloid_ctx_composite_2mm.nii.gz'
+            },
+            'WM_CEREBELLUM': {
+                '1mm': TEMPLATE_DIR / 'centiloid_wm_cerebellum_1mm.nii.gz',
+                '2mm': TEMPLATE_DIR / 'centiloid_wm_cerebellum_2mm.nii.gz'
+            }
         }
-    }
     
     # Tracer-specific templates and masks
     TRACER_DATA = {
@@ -76,25 +89,61 @@ class Config:
         'WM_CEREBELLUM': TEMPLATE_DIR / 'centiloid_wm_cerebellum.nii.gz'
     }
     
-    # Registration parameters
-    REGISTRATION = {
-        'DEFAULT': {
-            'type_of_transform': 'SyNRA',
-            'grad_step': 0.1,
-            'flow_sigma': 3,
-            'total_sigma': 0,
-            'aff_metric': 'mattes',
-            'syn_metric': 'mattes',
-            'reg_iterations': (40, 20, 0),
-            'aff_iterations': (2100, 1200, 1200, 10),
-            'aff_shrink_factors': (6, 4, 2, 1),
-            'aff_smoothing_sigmas': (4, 2, 1, 0)
-        },
-        'PET': {
-            'type_of_transform': 'SyNRA',
-            'grad_step': 0.1,
-            'aff_metric': 'mattes'
-        },
+    # Registration parameters - enhanced for different modalities
+        REGISTRATION = {
+            'DEFAULT': {
+                'type_of_transform': 'SyNRA',
+                'grad_step': 0.1,
+                'flow_sigma': 3,
+                'total_sigma': 0,
+                'aff_metric': 'mattes',
+                'syn_metric': 'mattes',
+                'reg_iterations': (40, 20, 0),
+                'aff_iterations': (2100, 1200, 1200, 10),
+                'aff_shrink_factors': (6, 4, 2, 1),
+                'aff_smoothing_sigmas': (4, 2, 1, 0)
+            },
+            'PET': {
+                'type_of_transform': 'SyNRA',
+                'grad_step': 0.1,
+                'flow_sigma': 3,
+                'aff_metric': 'mattes',
+                'syn_metric': 'mattes',
+                'reg_iterations': (40, 20, 10),
+                'aff_iterations': (2100, 1200, 1200, 10),
+                'aff_shrink_factors': (8, 4, 2, 1),
+                'aff_smoothing_sigmas': (4, 2, 1, 0),
+                'smoothing_sigmas': [4, 2, 1],
+                'shrink_factors': [4, 2, 1]
+            },
+            'CT': {
+                'type_of_transform': 'SyNRA',
+                'grad_step': 0.1,
+                'flow_sigma': 2,
+                'aff_metric': 'mattes',
+                'syn_metric': 'meansquares',
+                'reg_iterations': (50, 25, 10),
+                'aff_iterations': (2100, 1200, 1200, 10),
+                'aff_shrink_factors': (6, 4, 2, 1),
+                'aff_smoothing_sigmas': (3, 2, 1, 0),
+                'smoothing_sigmas': [3, 2, 1],
+                'shrink_factors': [3, 2, 1]
+            },
+            'T1': {
+                'type_of_transform': 'SyN',
+                'grad_step': 0.1,
+                'flow_sigma': 3,
+                'aff_metric': 'mattes',
+                'syn_metric': 'cc',
+                'reg_iterations': (100, 70, 50),
+                'aff_iterations': (2100, 1200, 1200, 10),
+                'aff_shrink_factors': (8, 4, 2, 1),
+                'aff_smoothing_sigmas': (3, 2, 1, 0),
+                'smoothing_sigmas': [4, 2, 0],
+                'shrink_factors': [4, 2, 1]
+            }
+        }
+    
         'MRI': {
             'type_of_transform': 'SyN',
             'grad_step': 0.1,
