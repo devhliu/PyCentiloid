@@ -40,15 +40,17 @@ class TracerPipeline:
                           resolution: str = '2mm',
                           output_dir: Optional[Path] = None,
                           apply_decay_correction: bool = True) -> Dict[str, str]:
-        """Process single PET image with specified resolution."""
+        """Process single PET image."""
         validate_input_images([pet_path])
         
         output_dir = Path(output_dir or Path(pet_path).parent)
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Get tracer-specific templates and masks for resolution
-        template_path = self.config.TRACER_DATA[self.tracer_type]['template'][resolution]
-        ref_mask = self.config.TRACER_DATA[self.tracer_type]['reference_mask'][resolution]
+        # Get tracer-specific templates and masks from new location
+        template_path = (self.config.DATA_DIR / 'templates' / 
+                        self.config.TRACER_DATA[self.tracer_type]['template'][resolution])
+        ref_mask = (self.config.DATA_DIR / 'masks' / 
+                   self.config.TRACER_DATA[self.tracer_type]['reference_mask'][resolution])
         target_mask = self.config.TRACER_DATA[self.tracer_type]['target_mask'][resolution]
         template_path = str(self.config.TEMPLATE_DIR / self.tracer_params['template'])
         

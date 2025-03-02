@@ -68,8 +68,8 @@ class TemplateBuilder:
             'T1': 'MNI152'
         }
         template_key = template_keys[self.modality]
-        return str(self.config.TEMPLATES[template_key][self.resolution])
-    
+        return str(self.config.DATA_DIR / 'templates' / 
+                  self.config.TEMPLATES[template_key][self.resolution])
     def create_template(self, image_paths, output_dir=None, iterations=3,
                        target_shape=None, target_voxel_size=None):
         """Create modality-specific template with specified resolution."""

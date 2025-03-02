@@ -68,17 +68,9 @@ class CentiloidReference:
     }
     
     def __init__(self, package_dir=None):
-        """
-        Initialize reference manager.
-        
-        Parameters
-        ----------
-        package_dir : str, optional
-            Path to package installation directory
-        """
-        if package_dir is None:
-            package_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.package_dir = Path(package_dir)
+        """Initialize reference manager."""
+        self.package_dir = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.data_dir = self.package_dir / 'data'
         
     def get_template_path(self, template_name):
         """
